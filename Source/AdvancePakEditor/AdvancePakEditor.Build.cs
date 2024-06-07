@@ -56,7 +56,9 @@ public class AdvancePakEditor : ModuleRules
                 "WorkspaceMenuStructure",
                 "PropertyEditor",
                 "Json",
-                "JsonUtilities"
+                "JsonUtilities",
+                "AssetRegistry",
+                "DeveloperToolSettings"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

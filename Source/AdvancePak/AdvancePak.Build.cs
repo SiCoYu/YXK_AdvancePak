@@ -46,6 +46,7 @@ public class AdvancePak : ModuleRules
                 "SSL",
                 "AdvancePakSSL",
                 "RSA",
+                "Developer",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
@@ -60,8 +61,7 @@ public class AdvancePak : ModuleRules
 
         bool bWithCurl = false;
 
-        if (Target.Platform == UnrealTargetPlatform.Win32 ||
-            Target.Platform == UnrealTargetPlatform.Win64)
+        if (Target.Platform == UnrealTargetPlatform.Win64)
         {
             AddEngineThirdPartyPrivateStaticDependencies(Target, "WinHttp");
             AddEngineThirdPartyPrivateStaticDependencies(Target, "libcurl");
@@ -74,12 +74,6 @@ public class AdvancePak : ModuleRules
         {
             AddEngineThirdPartyPrivateStaticDependencies(Target, "libcurl");
             AddEngineThirdPartyPrivateStaticDependencies(Target, "OpenSSL");
-
-            bWithCurl = true;
-        }
-        else if (Target.Platform == UnrealTargetPlatform.Switch)
-        {
-            AddEngineThirdPartyPrivateStaticDependencies(Target, "libcurl");
 
             bWithCurl = true;
         }

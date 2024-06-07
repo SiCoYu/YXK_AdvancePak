@@ -9,7 +9,7 @@
 #include "ContentBrowserDelegates.h"
 #include "LevelEditor.h"
 #include "AdvancePakLibrary.h"
-#include "AssetRegistryModule.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "ILauncherServicesModule.h"
 #include "ITargetDeviceServicesModule.h"
 #include "Utility/AdvancePakCreator.h"

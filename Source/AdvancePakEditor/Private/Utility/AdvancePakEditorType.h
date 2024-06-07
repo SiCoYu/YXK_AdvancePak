@@ -6,7 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "Engine/EngineTypes.h"
 #include "AdvancePakType.h"
-#include "Editor/UnrealEd/Classes/Settings/ProjectPackagingSettings.h"
+#include "Settings/ProjectPackagingSettings.h"
 #include "AdvancePakEditorType.generated.h"
 
 class FAdvancePakInformalInfo;

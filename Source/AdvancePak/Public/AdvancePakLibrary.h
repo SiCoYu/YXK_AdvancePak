@@ -7,7 +7,7 @@
 #include "AdvancePakType.h"
 #include "Misc/Paths.h"
 #include "Misc/App.h"
-#include "AssetRegistryModule.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "Misc/SecureHash.h"
 #include "AdvancePakLibrary.generated.h"
 
