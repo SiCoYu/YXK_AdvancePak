@@ -28,6 +28,7 @@
 #include "HAL/FileManager.h"
 
 #define LOCTEXT_NAMESPACE "SAdvancePakEditorLog"
+
 /** Expression context to test the given messages against the current text filter */
 class FLogFilter_TextFilterExpressionContext : public ITextFilterExpressionContext
 {
@@ -89,7 +90,7 @@ void SConsoleInputBox::Construct(const FArguments& InArgs)
 			[
 				SNew(SComboButton)
 				.IsEnabled(this, &SConsoleInputBox::IsCommandExecutorMenuEnabled)
-				.ComboButtonStyle(FEditorStyle::Get(), "GenericFilters.ComboButtonStyle")
+				.ComboButtonStyle(FAppStyle::Get(), "GenericFilters.ComboButtonStyle")
 				.ForegroundColor(FLinearColor::White)
 				.ContentPadding(0)
 				.OnGetMenuContent(this, &SConsoleInputBox::GetCommandExecutorMenuContent)
@@ -103,7 +104,7 @@ void SConsoleInputBox::Construct(const FArguments& InArgs)
 			+SHorizontalBox::Slot()
 			[
 				SAssignNew(InputText, SMultiLineEditableTextBox)
-				.Font(FEditorStyle::Get().GetWidgetStyle<FTextBlockStyle>("Log.Normal").Font)
+				.Font(FAppStyle::Get().GetWidgetStyle<FTextBlockStyle>("Log.Normal").Font)
 				.HintText(this, &SConsoleInputBox::GetActiveCommandExecutorHintText)
 				.AllowMultiLine(this, &SConsoleInputBox::GetActiveCommandExecutorAllowMultiLine)
 				.OnTextCommitted(this, &SConsoleInputBox::OnTextCommitted)
@@ -118,7 +119,7 @@ void SConsoleInputBox::Construct(const FArguments& InArgs)
 		.MenuContent
 		(
 			SNew(SBorder)
-			.BorderImage(FEditorStyle::GetBrush("Menu.Background"))
+			.BorderImage(FAppStyle::GetBrush("Menu.Background"))
 			.Padding( FMargin(2) )
 			[
 				SNew(SBox)
@@ -203,7 +204,7 @@ TSharedRef<ITableRow> SConsoleInputBox::MakeSuggestionListItemWidget(TSharedPtr<
 		[
 			SNew(STextBlock)
 			.Text(FText::FromString(SanitizedText))
-			.TextStyle(FEditorStyle::Get(), "Log.Normal")
+			.TextStyle(FAppStyle::Get(), "Log.Normal")
 			.HighlightText(Suggestions.SuggestionsHighlight)
 		];
 }
@@ -727,7 +728,7 @@ void FAdvancePakEditorLogTextLayoutMarshaller::AppendPendingMessagesToTextLayout
 
 		++NumAddedMessages;
 
-		const FTextBlockStyle& MessageTextStyle = FEditorStyle::Get().GetWidgetStyle<FTextBlockStyle>(Message->Style);
+		const FTextBlockStyle& MessageTextStyle = FAppStyle::Get().GetWidgetStyle<FTextBlockStyle>(Message->Style);
 
 		TSharedRef<FString> LineText = Message->Message;
 
@@ -829,8 +830,8 @@ void SAdvancePakEditorLog::Construct( const FArguments& InArgs )
 	MessagesTextMarshaller = FAdvancePakEditorLogTextLayoutMarshaller::Create(InArgs._Messages, &Filter);
 
 	MessagesTextBox = SNew(SMultiLineEditableTextBox)
-		.Style(FEditorStyle::Get(), "Log.TextBox")
-		.TextStyle(FEditorStyle::Get(), "Log.Normal")
+		.Style(FAppStyle::Get(), "Log.TextBox")
+		.TextStyle(FAppStyle::Get(), "Log.Normal")
 		.ForegroundColor(FLinearColor::Gray)
 		.Marshaller(MessagesTextMarshaller)
 		.IsReadOnly(true)
@@ -843,7 +844,7 @@ void SAdvancePakEditorLog::Construct( const FArguments& InArgs )
 	[
 		SNew(SBorder)
 		.Padding(3)
-		.BorderImage(FEditorStyle::GetBrush("ToolPanel.GroupBorder"))
+		.BorderImage(FAppStyle::GetBrush("ToolPanel.GroupBorder"))
 		[
 			SNew(SVerticalBox)
 
@@ -858,7 +859,7 @@ void SAdvancePakEditorLog::Construct( const FArguments& InArgs )
 				.AutoWidth()
 				[
 					SNew(SComboButton)
-					.ComboButtonStyle(FEditorStyle::Get(), "GenericFilters.ComboButtonStyle")
+					.ComboButtonStyle(FAppStyle::Get(), "GenericFilters.ComboButtonStyle")
 					.ForegroundColor(FLinearColor::White)
 					.ContentPadding(0)
 					.ToolTipText(LOCTEXT("AddFilterToolTip", "Add an output log filter."))
@@ -873,8 +874,8 @@ void SAdvancePakEditorLog::Construct( const FArguments& InArgs )
 						.AutoWidth()
 						[
 							SNew(STextBlock)
-							.TextStyle(FEditorStyle::Get(), "GenericFilters.TextStyle")
-							.Font(FEditorStyle::Get().GetFontStyle("FontAwesome.9"))
+							.TextStyle(FAppStyle::Get(), "GenericFilters.TextStyle")
+							.Font(FAppStyle::Get().GetFontStyle("FontAwesome.9"))
 							.Text(FText::FromString(FString(TEXT("\xf0b0"))) /*fa-filter*/)
 						]
 
@@ -883,7 +884,7 @@ void SAdvancePakEditorLog::Construct( const FArguments& InArgs )
 						.Padding(2, 0, 0, 0)
 						[
 							SNew(STextBlock)
-							.TextStyle(FEditorStyle::Get(), "GenericFilters.TextStyle")
+							.TextStyle(FAppStyle::Get(), "GenericFilters.TextStyle")
 							.Text(LOCTEXT("Filters", "Filters"))
 						]
 					]
@@ -936,7 +937,7 @@ void SAdvancePakEditorLog::Construct( const FArguments& InArgs )
 					SAssignNew(ViewOptionsComboButton, SComboButton)
 					.ContentPadding(0)
 					.ForegroundColor( this, &SAdvancePakEditorLog::GetViewButtonForegroundColor )
-					.ButtonStyle( FEditorStyle::Get(), "ToggleButton" ) // Use the tool bar item style for this button
+					.ButtonStyle( FAppStyle::Get(), "ToggleButton" ) // Use the tool bar item style for this button
 					.OnGetMenuContent( this, &SAdvancePakEditorLog::GetViewButtonContent )
 					.ButtonContent()
 					[
@@ -946,7 +947,7 @@ void SAdvancePakEditorLog::Construct( const FArguments& InArgs )
 						.AutoWidth()
 						.VAlign(VAlign_Center)
 						[
-							SNew(SImage).Image( FEditorStyle::GetBrush("GenericViewButton") )
+							SNew(SImage).Image( FAppStyle::GetBrush("GenericViewButton") )
 						]
  
 						+SHorizontalBox::Slot()
@@ -1036,8 +1037,9 @@ bool SAdvancePakEditorLog::CreateLogMessages( const TCHAR* V, ELogVerbosity::Typ
 		if (UObjectInitialized() && !GExitPurge)
 		{
 			// Logging can happen very late during shutdown, even after the UObject system has been torn down, hence the init check above
-			LogTimestampMode = GetDefault<UEditorStyleSettings>()->LogTimestampMode;
+			LogTimestampMode = LogTimestampMode::UTC;// GetDefault<UOutputLogSettings>()->LogTimestampMode;
 		}
+
 
 		const int32 OldNumMessages = OutMessages.Num();
 
@@ -1096,7 +1098,7 @@ FSlateColor SAdvancePakEditorLog::GetViewButtonForegroundColor() const
 	static const FName InvertedForegroundName("InvertedForeground");
 	static const FName DefaultForegroundName("DefaultForeground");
 
-	return ViewOptionsComboButton->IsHovered() ? FEditorStyle::GetSlateColor(InvertedForegroundName) : FEditorStyle::GetSlateColor(DefaultForegroundName);
+	return ViewOptionsComboButton->IsHovered() ? FAppStyle::GetSlateColor(InvertedForegroundName) : FAppStyle::GetSlateColor(DefaultForegroundName);
 }
 
 void SAdvancePakEditorLog::ExtendTextBoxMenu(FMenuBuilder& Builder)
@@ -1430,7 +1432,7 @@ TSharedRef<SWidget> SAdvancePakEditorLog::GetViewButtonContent()
 	MenuBuilder.AddMenuEntry(
 		LOCTEXT("FindSourceFile", "Open Source Location"),
 		LOCTEXT("FindSourceFileTooltip", "Opens the folder containing the source of the Output Log."),
-		FSlateIcon(FEditorStyle::GetStyleSetName(), "AdvancePakEditorLog.OpenSourceLocation"),
+		FSlateIcon(FAppStyle::GetAppStyleSetName(), "AdvancePakEditorLog.OpenSourceLocation"),
 		FUIAction(
 			FExecuteAction::CreateSP(this, &SAdvancePakEditorLog::OpenLogFileInExplorer)
 		)
@@ -1440,7 +1442,7 @@ TSharedRef<SWidget> SAdvancePakEditorLog::GetViewButtonContent()
 	MenuBuilder.AddMenuEntry(
 		LOCTEXT("OpenInExternalEditor", "Open In External Editor"),
 		LOCTEXT("OpenInExternalEditorTooltip", "Opens the Output Log in the default external editor."),
-		FSlateIcon(FEditorStyle::GetStyleSetName(), "AdvancePakEditorLog.OpenInExternalEditor"),
+		FSlateIcon(FAppStyle::GetAppStyleSetName(), "AdvancePakEditorLog.OpenInExternalEditor"),
 		FUIAction(
 			FExecuteAction::CreateSP(this, &SAdvancePakEditorLog::OpenLogFileInExternalEditor)
 		)

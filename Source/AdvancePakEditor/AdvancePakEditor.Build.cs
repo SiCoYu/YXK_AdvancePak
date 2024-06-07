@@ -44,10 +44,5 @@ public class AdvancePakEditor : ModuleRules
                 "AssetRegistry",
                 "DeveloperToolSettings"
 			});
-		
-        PrivateIncludePathModuleNames.AddRange(
-        new string[] {
-                "OutputLog",
-        });
     }
 }
