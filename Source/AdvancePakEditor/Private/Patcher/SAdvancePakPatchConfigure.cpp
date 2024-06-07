@@ -14,8 +14,8 @@
 #include "Widgets/Layout/SSeparator.h"
 #include "Widgets/Layout/SBox.h"
 
-#include "DesktopPlatform/Public/IDesktopPlatform.h"
-#include "DesktopPlatform/Public/DesktopPlatformModule.h"
+#include "IDesktopPlatform.h"
+#include "DesktopPlatformModule.h"
 #include "Framework/Application/SlateApplication.h"
 
 #include "Utility/AdvancePakCreator.h"

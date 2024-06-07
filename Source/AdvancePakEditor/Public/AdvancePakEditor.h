@@ -8,6 +8,10 @@
 class FToolBarBuilder;
 class FMenuBuilder;
 
+#if ENGINE_MAJOR_VERSION > 4 || ENGINE_MINOR_VERSION>=26
+	#define InvokeTab TryInvokeTab
+#endif
+
 class FAdvancePakEditorModule : public IModuleInterface
 {
 public:

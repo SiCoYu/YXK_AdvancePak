@@ -11,8 +11,8 @@
 #include "Widgets/Notifications/SNotificationList.h"
 #include "Framework/Notifications/NotificationManager.h"
 #include "Widgets/Layout/SBox.h"
-#include "DesktopPlatform/Public/IDesktopPlatform.h"
-#include "DesktopPlatform/Public/DesktopPlatformModule.h"
+#include "IDesktopPlatform.h"
+#include "DesktopPlatformModule.h"
 #include "Widgets/SBoxPanel.h"
 #include "Widgets/Text/STextBlock.h"
 #include "Widgets/Layout/SBorder.h"
@@ -23,7 +23,6 @@
 #include "Framework/Docking/TabManager.h"
 #include "Forms/SAdvancePakAccordsForm.h"
 #include "AdvancePakType.h"
-
 
 #define LOCTEXT_NAMESPACE "SAdvancePakPatchOperate"
 
@@ -546,7 +545,7 @@ void SAdvancePakPatchOperate::OnPickupTaskBegin()
 		Arguments.Add(TEXT("TaskName"), OPTEXT("PickupTask"));
 		FNotificationInfo Info(FText::Format(LOCTEXT("PickupTaskInProgressNotification", "{TaskName} for {Platform}..."), Arguments));
 
-		Info.Image = FEditorStyle::GetBrush(TEXT("MainFrame.CookContent"));
+		Info.Image = FAppStyle::GetBrush(TEXT("MainFrame.CookContent"));
 		Info.bFireAndForget = false;
 		Info.FadeOutDuration = 0.0f;
 		Info.ExpireDuration = 0.0f;

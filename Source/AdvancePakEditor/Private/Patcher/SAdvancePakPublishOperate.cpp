@@ -4,7 +4,7 @@
 #include "SAdvancePakPublishOperate.h"
 #include "SlateOptMacros.h"
 #include "Utility/AdvancePakCreator.h"
-#include "DesktopPlatform/Public/IDesktopPlatform.h"
+#include "IDesktopPlatform.h"
 #include "Widgets/Text/STextBlock.h"
 #include "Widgets/Layout/SBorder.h"
 #include "EditorStyleSet.h"
@@ -19,13 +19,12 @@
 #include "Framework/Docking/TabManager.h"
 #include "Misc/SecureHash.h"
 #include "AdvancePakType.h"
-#include "DesktopPlatform/Public/DesktopPlatformModule.h"
+#include "DesktopPlatformModule.h"
 #include "Framework/Notifications/NotificationManager.h"
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Input/SEditableTextBox.h"
 #include "Forms/SAdvancePakAccordsForm.h"
 #include "Widgets/SBoxPanel.h"
-
 
 class FAdvancePakCleanVisitor : public IPlatformFile::FDirectoryVisitor
 {
@@ -1196,7 +1195,7 @@ void SAdvancePakPublishOperate::OnPickupTaskBegin()
 		Arguments.Add(TEXT("Platform"), FText::FromString(AdvancePakCreator->GetFuturePublish()->Platform));
 		Arguments.Add(TEXT("TaskName"), OPTEXT("PickupTask"));
 		FNotificationInfo Info(FText::Format(LOCTEXT("PickupTaskInProgressNotification", "{TaskName} for {Platform}..."), Arguments));
-		Info.Image = FEditorStyle::GetBrush(TEXT("MainFrame.CookContent"));
+		Info.Image = FAppStyle::GetBrush(TEXT("MainFrame.CookContent"));
 		Info.bFireAndForget = false;
 		Info.FadeOutDuration = 0.0f;
 		Info.ExpireDuration = 0.0f;

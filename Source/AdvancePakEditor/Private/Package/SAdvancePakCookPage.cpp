@@ -35,7 +35,6 @@
 #include "Widgets/Layout/SExpandableArea.h"
 #include "IDetailsView.h"
 
-
 #define LOCTEXT_NAMESPACE "SAdvancePakCookPage"
 
 SAdvancePakCookPage::~SAdvancePakCookPage()
@@ -262,7 +261,7 @@ void SAdvancePakCookPage::DealwithCookProcBegin()
 		Arguments.Add(TEXT("TaskName"), OPTEXT("CookTask"));
 		FNotificationInfo Info(FText::Format(LOCTEXT("UatTaskInProgressNotification", "{TaskName} for {Platform}..."), Arguments));
 
-		Info.Image = FEditorStyle::GetBrush(TEXT("MainFrame.CookContent"));
+		Info.Image = FAppStyle::GetBrush(TEXT("MainFrame.CookContent"));
 		Info.bFireAndForget = false;
 		Info.FadeOutDuration = 0.0f;
 		Info.ExpireDuration = 0.0f;
