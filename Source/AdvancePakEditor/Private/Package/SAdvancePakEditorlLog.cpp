@@ -18,7 +18,7 @@
 #include "Widgets/Input/SComboButton.h"
 #include "Widgets/Views/SListView.h"
 #include "EditorStyleSet.h"
-#include "Classes/EditorStyleSettings.h"
+#include "Settings/EditorStyleSettings.h"
 #include "Widgets/Input/SSearchBox.h"
 #include "Widgets/Input/SCheckBox.h"
 #include "Widgets/Images/SImage.h"
