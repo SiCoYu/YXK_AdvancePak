@@ -8,20 +8,6 @@ public class AdvancePakEditor : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
-		PublicIncludePaths.AddRange(
-			new string[] {
-				// ... add public include paths required here ...
-                //"LauncherServices/Private",
-            }
-			);
-				
-		
-		PrivateIncludePaths.AddRange(
-			new string[] {
-                
-            }
-			);
-
         PublicIncludePathModuleNames.AddRange(
             new string[] {
                 "LauncherServices",
@@ -33,9 +19,7 @@ public class AdvancePakEditor : ModuleRules
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
-			}
-			);
+			});
 			
 		
 		PrivateDependencyModuleNames.AddRange(
@@ -59,16 +43,11 @@ public class AdvancePakEditor : ModuleRules
                 "JsonUtilities",
                 "AssetRegistry",
                 "DeveloperToolSettings"
-				// ... add private dependencies that you statically link with here ...	
-			}
-			);
+			});
 		
-		
-		DynamicallyLoadedModuleNames.AddRange(
-			new string[]
-			{
-				// ... add any modules that your module loads dynamically here ...
-			}
-			);
-	}
+        PrivateIncludePathModuleNames.AddRange(
+        new string[] {
+                "OutputLog",
+        });
+    }
 }

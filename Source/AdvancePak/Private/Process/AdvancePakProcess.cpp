@@ -8,7 +8,7 @@
 #include "AdvancePakType.h"
 #include "AdvancePakAgency.h" 
 #include "Misc/Paths.h"
-#include "PakFile/Public/IPlatformFilePak.h"
+#include "IPlatformFilePak.h"
 
 void FAdvancePakProcess::InitializeProcess(UAdvancePakWork* InAdvancePakWork)
 {

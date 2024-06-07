@@ -64,7 +64,7 @@ void FAdvancePakEditorModule::ShutdownModule()
 
 void FAdvancePakEditorModule::PluginButtonClicked()
 {
-	TSharedRef<SDockTab> DockTab = FGlobalTabmanager::Get()->InvokeTab(AdvancePakEditorTabName);
+	FGlobalTabmanager::Get()->InvokeTab(AdvancePakEditorTabName);
 }
 
 void FAdvancePakEditorModule::AddMenuExtension(FMenuBuilder& Builder)
