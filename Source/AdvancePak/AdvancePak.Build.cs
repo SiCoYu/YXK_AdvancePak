@@ -8,27 +8,11 @@ public class AdvancePak : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
-		PublicIncludePaths.AddRange(
-			new string[] {
-				// ... add public include paths required here ...
-			}
-			);
-				
-		
-		PrivateIncludePaths.AddRange(
-			new string[] {
-				// ... add other private include paths required here ...
-			}
-			);
-			
-		
 		PublicDependencyModuleNames.AddRange(
 			new string[]
 			{
 				"Core",
-				// ... add other public dependencies that you statically link with here ...
-			}
-			);
+			});
 			
 		
 		PrivateDependencyModuleNames.AddRange(
@@ -46,19 +30,9 @@ public class AdvancePak : ModuleRules
                 "SSL",
                 "AdvancePakSSL",
                 "RSA",
-                "Developer",
-				// ... add private dependencies that you statically link with here ...	
-			}
-			);
+                "DesktopPlatform",
+            });
 		
-		
-		DynamicallyLoadedModuleNames.AddRange(
-			new string[]
-			{
-				// ... add any modules that your module loads dynamically here ...
-			}
-			);
-
         bool bWithCurl = false;
 
         if (Target.Platform == UnrealTargetPlatform.Win64)
@@ -95,6 +69,5 @@ public class AdvancePak : ModuleRules
         {
             PublicFrameworks.Add("Security");
         }
-
     }
 }

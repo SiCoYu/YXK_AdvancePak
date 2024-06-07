@@ -3,7 +3,7 @@
 
 #include "AdvancePakWork.h"
 #include "PakFile/Public/IPlatformFilePak.h"
-#include "Online/HTTP/Public/HttpModule.h"
+#include "HttpModule.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Kismet/GameplayStatics.h"
 #include "HAL/PlatformFilemanager.h"
