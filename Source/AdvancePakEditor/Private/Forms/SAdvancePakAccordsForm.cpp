@@ -14,7 +14,6 @@
 #include "Widgets/Layout/SSeparator.h"
 #include "Widgets/Layout/SBorder.h"
 
-
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SAdvancePakAccordsForm::Construct(const FArguments& InArgs, const TSharedRef<FAdvancePakCreator>& InModel)
 {
@@ -90,7 +89,7 @@ void SAdvancePakAccordsForm::Construct(const FArguments& InArgs, const TSharedRe
 		.Padding(8.f, 0.f, 0.f, 0.f)
 		[
 			SNew(SImage)
-			.Image(FEditorStyle::GetBrush(TEXT("Icons.Error")))
+			.Image(FAppStyle::GetBrush(TEXT("Icons.Error")))
 		.Visibility(this, &SAdvancePakAccordsForm::DealwithPromptVisibility)
 		]
 
