@@ -1,0 +1,8 @@
+{
+	"BuildId": "d0b83db0-950c-4dc8-bfcd-0a09b1905d0e",
+	"Modules": 
+	{
+		"AdvancePak": "UnrealEditor-AdvancePak.dll",
+		"AdvancePakEditor": "UnrealEditor-AdvancePakEditor.dll"
+	}
+}

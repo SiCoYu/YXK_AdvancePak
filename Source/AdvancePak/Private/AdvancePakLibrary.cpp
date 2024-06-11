@@ -324,28 +324,36 @@ FRSAKeyHandle UAdvancePakLibrary::ParseRSAKeyFromJson(TSharedPtr<FJsonObject> In
 
 bool UAdvancePakLibrary::ExtractPakFile(const TCHAR* InPakFilename, TArray<FPakInputPair>* OutEntries, const FKeyChain& InKeyChain)
 {
-	FPakFile PakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
-	if (PakFile.IsValid())
+	//FPakFile PakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
+	
+#if ENGINE_MAJOR_VERSION >= 5 || ENGINE_MINOR_VERSION >= 27
+	TRefCountPtr<FPakFile> PakFile = new FPakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
+	FPakFile* PakFilePtr = PakFile.GetReference();
+#else
+	TSharedPtr<FPakFile> PakFile = MakeShared<FPakFile>(FPlatformFileManager::Get().GetPlatformFile(), *InPakFilename, false);
+	FPakFile* PakFilePtr = PakFile.Get();
+#endif // ENGINE_MAJOR_VERSION >= 5 || ENGINE_MINOR_VERSION >= 27
+	if(PakFilePtr && PakFilePtr->IsValid())
 	{
-		FArchive& PakReader = *PakFile.GetSharedReader(NULL);
+		auto PakReader = PakFilePtr->GetSharedReader(nullptr);
 		const int64 BufferSize = 8 * 1024 * 1024; // 8MB buffer for extracting
 		void* Buffer = FMemory::Malloc(BufferSize);
 		int64 CompressionBufferSize = 0;
-		uint8* PersistantCompressionBuffer = NULL;
+		uint8* PersistantCompressionBuffer = nullptr;
 		int32 ErrorCount = 0;
 		int32 FileCount = 0;
 		int32 ExtractedCount = 0;
 
-		FString SourceFilePath = FPaths::ConvertRelativePathToFull(FPaths::ProjectSavedDir() / FString("Visual") / PakFile.GetMountPoint().Replace(TEXT("../../../"), TEXT("")));
+		FString SourceFilePath = FPaths::ConvertRelativePathToFull(FPaths::ProjectSavedDir() / FString("Visual") / PakFilePtr->GetMountPoint().Replace(TEXT("../../../"), TEXT("")));
 
-		for (FPakFile::FFileIterator It(PakFile, false); It; ++It, ++FileCount)
+		for (FPakFile::FFileIterator It(*PakFile, false); It; ++It, ++FileCount)
 		{
 			const FPakEntry& Entry = It.Info();
 
-			PakReader.Seek(Entry.Offset);
+			PakReader->Seek(Entry.Offset);
 			uint32 SerializedCrcTest = 0;
 			FPakEntry EntryInfo;
-			EntryInfo.Serialize(PakReader, PakFile.GetInfo().Version);
+			EntryInfo.Serialize(PakReader.GetArchive(), PakFilePtr->GetInfo().Version);
 			if (EntryInfo == Entry)
 			{
 				FPakInputPair Input;
@@ -354,11 +362,19 @@ bool UAdvancePakLibrary::ExtractPakFile(const TCHAR* InPakFilename, TArray<FPakI
 
 				if (Entry.CompressionMethodIndex == 0)
 				{
-					BufferedCopyFile(*FileHandle, PakReader, PakFile, Entry, Buffer, BufferSize, InKeyChain);
+#if ENGINE_MAJOR_VERSION > 4
+					BufferedCopyFile(*FileHandle, PakReader.GetArchive(), *PakFilePtr, Entry, Buffer, BufferSize, InKeyChain);
+#else
+					BufferedCopyFile(*FileHandle, *PakReader, PakFile, Entry, Buffer, BufferSize, InKeyChain);
+#endif
 				}
 				else
 				{
-					UncompressCopyFile(*FileHandle, PakReader, Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, PakFile);
+#if ENGINE_MAJOR_VERSION > 4
+					UncompressCopyFile(*FileHandle, PakReader.GetArchive(), Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, *PakFilePtr);
+#else
+					UncompressCopyFile(*FileHandle, *PakReader, Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, PakFile);
+#endif
 				}
 				UE_LOG(LogTemp, Display, TEXT("Extracted \"%s\" Offset %d."), *It.Filename(), Entry.Offset);
 				ExtractedCount++;
@@ -366,7 +382,7 @@ bool UAdvancePakLibrary::ExtractPakFile(const TCHAR* InPakFilename, TArray<FPakI
 				Input.Source = SourceFilePath / It.Filename();
 				FPaths::NormalizeFilename(Input.Source);
 
-				Input.Dest = PakFile.GetMountPoint() / It.Filename();
+				Input.Dest = PakFilePtr->GetMountPoint() / It.Filename();
 				FPaths::NormalizeFilename(Input.Dest);
 				//FPakFile::MakeDirectoryFromPath(Input.Dest);
 
@@ -391,23 +407,33 @@ bool UAdvancePakLibrary::ExtractPakFile(const TCHAR* InPakFilename, TArray<FPakI
 
 bool UAdvancePakLibrary::ExtractSingleFile(const TCHAR* InPakFilename, const TCHAR* InSingleFilename, TArray<uint8>& FileData, const FKeyChain& InKeyChain)
 {
-	FPakFile PakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
-	if (PakFile.IsValid())
+	// FPakFile PakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
+#if ENGINE_MAJOR_VERSION >= 5 || ENGINE_MINOR_VERSION >= 27
+	TRefCountPtr<FPakFile> PakFile = new FPakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
+	FPakFile* PakFilePtr = PakFile.GetReference();
+#else
+	TSharedPtr<FPakFile> PakFile = MakeShared<FPakFile>(FPlatformFileManager::Get().GetPlatformFile(), *InPakFilename, false);
+	FPakFile* PakFilePtr = PakFile.Get();
+#endif // ENGINE_MAJOR_VERSION >= 5 || ENGINE_MINOR_VERSION >= 27
+	if (PakFilePtr->IsValid())
 	{
-		FArchive& PakReader = *PakFile.GetSharedReader(NULL);
+		auto PakReader = PakFilePtr->GetSharedReader(nullptr);
 		const int64 BufferSize = 8 * 1024 * 1024; // 8MB buffer for extracting
 		void* Buffer = FMemory::Malloc(BufferSize);
 		int64 CompressionBufferSize = 0;
-		uint8* PersistantCompressionBuffer = NULL;
+		uint8* PersistantCompressionBuffer = nullptr;
 
 		FPakEntry Entry;
-		if (PakFile.Find(UAdvancePakLibrary::DefaultGameIniPath, &Entry) == FPakFile::EFindResult::Found)
+		if (PakFilePtr->Find(UAdvancePakLibrary::DefaultGameIniPath, &Entry) == FPakFile::EFindResult::Found)
 		{
-
-			PakReader.Seek(Entry.Offset);
+			PakReader->Seek(Entry.Offset);
 			uint32 SerializedCrcTest = 0;
 			FPakEntry EntryInfo;
-			EntryInfo.Serialize(PakReader, PakFile.GetInfo().Version);
+#if ENGINE_MAJOR_VERSION > 4	
+			EntryInfo.Serialize(PakReader.GetArchive(), PakFilePtr->GetInfo().Version);
+#else
+			EntryInfo.Serialize(*PakReader, PakFilePtr->GetInfo().Version);
+#endif
 			if (EntryInfo == Entry)
 			{
 				FMemoryWriter MemoryFile(FileData);
@@ -415,11 +441,19 @@ bool UAdvancePakLibrary::ExtractSingleFile(const TCHAR* InPakFilename, const TCH
 
 				if (Entry.CompressionMethodIndex == 0)
 				{
-					BufferedCopyFile(*FileHandle, PakReader, PakFile, Entry, Buffer, BufferSize, InKeyChain);
+#if ENGINE_MAJOR_VERSION > 4
+					BufferedCopyFile(*FileHandle, PakReader.GetArchive(), *PakFilePtr, Entry, Buffer, BufferSize, InKeyChain);
+#else
+					BufferedCopyFile(*FileHandle, *PakReader, *PakFilePtr, Entry, Buffer, BufferSize, InKeyChain);
+#endif
 				}
 				else
 				{
-					UncompressCopyFile(*FileHandle, PakReader, Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, PakFile);
+#if ENGINE_MAJOR_VERSION > 4
+					UncompressCopyFile(*FileHandle, PakReader.GetArchive(), Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, *PakFilePtr);
+#else
+					UncompressCopyFile(*FileHandle, *PakReader, Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, PakFile);
+#endif
 				}
 			}
 		}
@@ -516,7 +550,11 @@ void UAdvancePakLibrary::ApplyEncryptionKeys(const FKeyChain& KeyChain)
 	{
 		if (Key.Key.IsValid())
 		{
+#if ENGINE_MAJOR_VERSION > 4 || ENGINE_MINOR_VERSION >= 26
+			FCoreDelegates::GetRegisterEncryptionKeyMulticastDelegate().Broadcast(Key.Key, Key.Value.Key);
+#else
 			FCoreDelegates::GetRegisterEncryptionKeyDelegate().ExecuteIfBound(Key.Key, Key.Value.Key);
+#endif
 		}
 	}
 }
