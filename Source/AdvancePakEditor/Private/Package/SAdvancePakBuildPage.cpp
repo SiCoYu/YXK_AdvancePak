@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Futurecription page of Project Configures.
 
-
+#pragma warning(disable : 4834)
 #include "SAdvancePakBuildPage.h"
 #include "SlateOptMacros.h"
 #include "Widgets/Images/SImage.h"
@@ -654,7 +654,7 @@ void SAdvancePakBuildPage::OnBuildTaskBegin()
 		Arguments.Add(TEXT("TaskName"), OPTEXT(TEXT("BuildTask")));
 		FNotificationInfo Info(FText::Format(LOCTEXT("UatTaskInProgressNotification", "{TaskName} for {Platform}..."), Arguments));
 
-		Info.Image = FEditorStyle::GetBrush(TEXT("MainFrame.CookContent"));
+		Info.Image = FAppStyle::GetBrush(TEXT("MainFrame.CookContent"));
 		Info.bFireAndForget = false;
 		Info.FadeOutDuration = 0.0f;
 		Info.ExpireDuration = 0.0f;

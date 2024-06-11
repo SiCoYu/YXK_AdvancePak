@@ -26,6 +26,7 @@
 #include "Misc/CoreDelegates.h"
 #include "HAL/PlatformOutputDevices.h"
 #include "HAL/FileManager.h"
+#include "Misc/OutputDevice.h"
 
 #define LOCTEXT_NAMESPACE "SAdvancePakEditorLog"
 
@@ -1037,7 +1038,7 @@ bool SAdvancePakEditorLog::CreateLogMessages( const TCHAR* V, ELogVerbosity::Typ
 		if (UObjectInitialized() && !GExitPurge)
 		{
 			// Logging can happen very late during shutdown, even after the UObject system has been torn down, hence the init check above
-			LogTimestampMode = LogTimestampMode::UTC;// GetDefault<UOutputLogSettings>()->LogTimestampMode;
+			LogTimestampMode = ELogTimes::UTC;// GetDefault<UOutputLogSettings>()->LogTimestampMode;
 		}
 
 
