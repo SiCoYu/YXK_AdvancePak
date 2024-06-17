@@ -29,15 +29,27 @@ void UAdvancePakEditorLibrary::InitializeLibrary()
 	PlatformFile = &FPlatformFileManager::Get().GetPlatformFile();
 
 #if PLATFORM_WINDOWS
+#if ENGINE_MAJOR_VERSION > 4
+	UnrealPakPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Win64") / FString("UnrealPak.exe");
+	UnrealCmdPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Win64") / FString("UnrealEditor.exe");
+	UnrealRunUAT = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Build") / FString("BatchFiles") / FString("RunUAT.bat");
+#else
 	UnrealPakPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Win64") / FString("UnrealPak.exe");
 	UnrealCmdPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Win64") / FString("UE4Editor-Cmd.exe");
 	UnrealRunUAT = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Build") / FString("BatchFiles") / FString("RunUAT.bat");
 #endif
+#endif
 
 #if PLATFORM_MAC
+#if ENGINE_MAJOR_VERSION > 4
+	UnrealPakPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Mac") / FString("UnrealPak");
+	UnrealCmdPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Mac") / FString("UnrealEditor.app") / FString("Contents") / FString("MacOS") / FString("UnrealEditor");
+	UnrealRunUAT = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Build") / FString("BatchFiles") / FString("RunUAT.command");
+#else
 	UnrealPakPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Mac") / FString("UnrealPak");
 	UnrealCmdPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Mac") / FString("UE4Editor.app") / FString("Contents") / FString("MacOS") / FString("UE4Editor");
 	UnrealRunUAT = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Build") / FString("BatchFiles") / FString("RunUAT.command");
+#endif
 #endif
 
 	GameContentPath = FString::Printf(TEXT("../../../%s/Content/"), FApp::GetProjectName());
