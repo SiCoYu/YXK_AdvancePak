@@ -33,23 +33,11 @@ void SAdvancePakPlatformsForm::Construct(const FArguments& InArgs, const TShared
 	{
 #if PLATFORM_WINDOWS
 		PlatformList.Add(FString("Android_ASTC"));
-		PlatformList.Add(FString("Android_ATC"));
-		PlatformList.Add(FString("Android_DXT"));
-		PlatformList.Add(FString("Android_ETC1"));
-		PlatformList.Add(FString("Android_ETC1a"));
-		PlatformList.Add(FString("Android_ETC2"));
-		PlatformList.Add(FString("Android_PVRTC"));
-		PlatformList.Add(FString("WindowsNoEditor"));
+		PlatformList.Add(FString("Windows"));
 #endif
 
 #if PLATFORM_MAC
 		PlatformList.Add(new FString("Android_ASTC"));
-		PlatformList.Add(Mnew FString("Android_ATC"));
-		PlatformList.Add(new FString("Android_DXT"));
-		PlatformList.Add(new FString("Android_ETC1"));
-		PlatformList.Add(new FString("Android_ETC1a"));
-		PlatformList.Add(new FString("Android_ETC2"));
-		PlatformList.Add(new FString("Android_PVRTC"));
 		PlatformList.Add(new FString("IOS"));
 		PlatformList.Add(new FString("MacNoEditor"));
 #endif

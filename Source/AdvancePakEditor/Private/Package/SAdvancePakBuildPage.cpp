@@ -398,7 +398,7 @@ FString SAdvancePakBuildPage::GetBuildPlatformOptions(const FString& PlatformNam
 {
 	FString OptionsString = FString();
 
-	if (PlatformName.Equals("WindowsNoEditor"))
+	if (PlatformName.Equals("Windows"))
 	{
 		OptionsString = FString::Printf(TEXT("-ScriptsForProject=\"%s\" BuildCookRun -nocompile -nocompileeditor -installed -nop4 -project=\"%s\" -cook -stage -archive -package -clientconfig=%s -ue4exe=\"%s\" -archivedirectory=\"%s\" -compressed -SkipCookingEditorContent -pak -prereqs -targetplatform=Win64 -build -utf8output"),
 			*FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()),
