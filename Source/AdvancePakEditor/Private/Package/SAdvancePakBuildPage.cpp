@@ -400,7 +400,7 @@ FString SAdvancePakBuildPage::GetBuildPlatformOptions(const FString& PlatformNam
 
 	if (PlatformName.Equals("Windows"))
 	{
-		OptionsString = FString::Printf(TEXT("-ScriptsForProject=\"%s\" BuildCookRun -nocompile -nocompileeditor -installed -nop4 -project=\"%s\" -cook -stage -archive -package -clientconfig=%s -ue4exe=\"%s\" -archivedirectory=\"%s\" -compressed -SkipCookingEditorContent -pak -prereqs -targetplatform=Win64 -build -utf8output"),
+		OptionsString = FString::Printf(TEXT("-ScriptsForProject=\"%s\" BuildCookRun -nocompile -nocompileeditor -installed -nop4 -project=\"%s\" -cook -stage -archive -package -clientconfig=%s -unrealexe=\"%s\" -archivedirectory=\"%s\" -compressed -SkipCookingEditorContent -pak -prereqs -targetplatform=Win64 -build -utf8output"),
 			*FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()),
 			*FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()),
 			*AbsorbBuildConfigToString(BuildConfiguresObject->BuildConfig),
@@ -414,7 +414,7 @@ FString SAdvancePakBuildPage::GetBuildPlatformOptions(const FString& PlatformNam
 		PlatformName.Split("_", NULL, &FormatString);
 		if (!FormatString.IsEmpty())
 		{
-			OptionsString = FString::Printf(TEXT("-ScriptsForProject=\"%s\" BuildCookRun -nocompileeditor -installed -nop4 -project=\"%s\" -cook -stage -archive -package -clientconfig=%s -ue4exe=\"%s\" -archivedirectory=\"%s\" -compressed -SkipCookingEditorContent -pak -prereqs -targetplatform=Android -cookflavor=%s -build -utf8output -allmaps -nocompile"),
+			OptionsString = FString::Printf(TEXT("-ScriptsForProject=\"%s\" BuildCookRun -nocompileeditor -installed -nop4 -project=\"%s\" -cook -stage -archive -package -clientconfig=%s -unrealexe=\"%s\" -archivedirectory=\"%s\" -compressed -SkipCookingEditorContent -pak -prereqs -targetplatform=Android -cookflavor=%s -build -utf8output -allmaps -nocompile"),
 				*FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()), *FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()),
 				*AbsorbBuildConfigToString(BuildConfiguresObject->BuildConfig),
 				*UAdvancePakEditorLibrary::UnrealCmdPath,
@@ -425,7 +425,7 @@ FString SAdvancePakBuildPage::GetBuildPlatformOptions(const FString& PlatformNam
 	}
 	else if (PlatformName.Equals("IOS"))
 	{
-		OptionsString = FString::Printf(TEXT("-ScriptsForProject=\"%s\" BuildCookRun -nocompileeditor -nop4 -project=\"%s\" -cook -stage -archive -archivedirectory=\"%s\" -package -clientconfig=%s -ue4exe=\"%s\" -compressed -SkipCookingEditorContent -pak -prereqs -targetplatform=IOS -build -utf8output"),
+		OptionsString = FString::Printf(TEXT("-ScriptsForProject=\"%s\" BuildCookRun -nocompileeditor -nop4 -project=\"%s\" -cook -stage -archive -archivedirectory=\"%s\" -package -clientconfig=%s -unrealexe=\"%s\" -compressed -SkipCookingEditorContent -pak -prereqs -targetplatform=IOS -build -utf8output"),
 			*FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()),
 			*FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()),
 			*OutputDirEditor->GetText().ToString(),
@@ -435,7 +435,7 @@ FString SAdvancePakBuildPage::GetBuildPlatformOptions(const FString& PlatformNam
 	}
 	else if (PlatformName.Equals("MacNoEditor"))
 	{
-		OptionsString = FString::Printf(TEXT("-ScriptsForProject=\"%s\" BuildCookRun -nocompileeditor -nop4 -project=\"%s\" -cook -stage -archive -archivedirectory=\"%s\" -package -ue4exe=\"%s\" -pak -prereqs -nodebuginfo -targetplatform=Mac -build -target=%s -clientconfig=%s -utf8output"),
+		OptionsString = FString::Printf(TEXT("-ScriptsForProject=\"%s\" BuildCookRun -nocompileeditor -nop4 -project=\"%s\" -cook -stage -archive -archivedirectory=\"%s\" -package -unrealexe=\"%s\" -pak -prereqs -nodebuginfo -targetplatform=Mac -build -target=%s -clientconfig=%s -utf8output"),
 			*FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()),
 			*FPaths::ConvertRelativePathToFull(FPaths::GetProjectFilePath()),
 			*OutputDirEditor->GetText().ToString(),
@@ -636,11 +636,17 @@ void SAdvancePakBuildPage::OnBuildTaskOutput(FString OutputLog)
 	{
 		UE_LOG(AdvancePakLog, Log, TEXT("%s"), *OutputLog);
 	}
-
+#if ENGINE_MAJOR_VERSION > 4
+	if (OutputLog.Contains(TEXT("-CreateMultiple")))
+	{
+		CreatePakCommand = OutputLog;
+	}
+#else
 	if (OutputLog.Contains(TEXT("Output from")) && OutputLog.Contains(TEXT("-create")))
 	{
 		CreatePakCommand = OutputLog;
 	}
+#endif
 }
 
 void SAdvancePakBuildPage::OnBuildTaskBegin()
@@ -723,11 +729,31 @@ void SAdvancePakBuildPage::OnBuildTaskSucceed()
 
 		CreatePakCommand.RemoveFromStart(TEXT("Output from: "));
 
+
+		FString PakListContext;
+
+
+	#if ENGINE_MAJOR_VERSION > 4
+		FString CreatePakCommandsList;
+		FString CreateMultipleCommandListPath;
+		if (FParse::Value(*CreatePakCommand, TEXT("-CreateMultiple="), CreateMultipleCommandListPath))
+		{
+			if (!FFileHelper::LoadFileToString(CreatePakCommandsList, *CreateMultipleCommandListPath))
+			{
+				UE_LOG(AdvancePakLog, Error, TEXT("Failed to read command list file '%s'."), *CreateMultipleCommandListPath);
+			}
+			FString PakListPath;
+			FParse::Value(*CreatePakCommandsList, TEXT("-create="), PakListPath);
+			FFileHelper::LoadFileToString(PakListContext, *PakListPath);
+		}
+	#else
 		FString PakListPath;
 		FParse::Value(*CreatePakCommand, TEXT("-create="), PakListPath);
 
-		FString PakListContext;
 		FFileHelper::LoadFileToString(PakListContext, *PakListPath);
+	#endif
+
+		
 
 		FString SaveConfigPath = ConfigDirEditor->GetText().ToString() / BuildConfiguresObject->Version;
 
