@@ -506,12 +506,6 @@ struct FPakCommandLineParameters
 	bool bAlignFilesLargerThanBlock;	// Align files that are larger than block size
 };
 
-struct FPakEntryPair
-{
-	FString Filename;
-	FPakEntry Info;
-};
-
 struct FPakInputPair
 {
 	FString Source;

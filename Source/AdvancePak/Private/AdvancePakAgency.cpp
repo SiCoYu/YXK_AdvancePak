@@ -199,7 +199,7 @@ void FAdvancePakAgency::AppendToHeader(const FString& HeaderName, const FString&
 
 bool FAdvancePakAgency::ProcessRequest()
 {
-	if (TotalFileSize > 0)
+	/*if (TotalFileSize > 0)
 	{
 		return DoProcessRequest();
 	}
@@ -208,7 +208,8 @@ bool FAdvancePakAgency::ProcessRequest()
 	HttpHeadRequest->OnHeaderReceived().BindRaw(this, &FAdvancePakAgency::OnProcessHeaderReceived);
 	HttpHeadRequest->SetURL(HttpRequest->GetURL());
 	HttpHeadRequest->SetVerb(TEXT("HEAD"));
-	return HttpHeadRequest->ProcessRequest();
+	return HttpHeadRequest->ProcessRequest();*/
+	return true;
 }
 
 void FAdvancePakAgency::CancelRequest()

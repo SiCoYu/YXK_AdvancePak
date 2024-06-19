@@ -324,123 +324,123 @@ FRSAKeyHandle UAdvancePakLibrary::ParseRSAKeyFromJson(TSharedPtr<FJsonObject> In
 
 bool UAdvancePakLibrary::ExtractPakFile(const TCHAR* InPakFilename, TArray<FPakInputPair>* OutEntries, const FKeyChain& InKeyChain)
 {
-	FPakFile PakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
-	if (PakFile.IsValid())
-	{
-		FArchive& PakReader = *PakFile.GetSharedReader(NULL);
-		const int64 BufferSize = 8 * 1024 * 1024; // 8MB buffer for extracting
-		void* Buffer = FMemory::Malloc(BufferSize);
-		int64 CompressionBufferSize = 0;
-		uint8* PersistantCompressionBuffer = NULL;
-		int32 ErrorCount = 0;
-		int32 FileCount = 0;
-		int32 ExtractedCount = 0;
+	//FPakFile PakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
+	//if (PakFile.IsValid())
+	//{
+	//	FArchive& PakReader = *PakFile.GetSharedReader(NULL);
+	//	const int64 BufferSize = 8 * 1024 * 1024; // 8MB buffer for extracting
+	//	void* Buffer = FMemory::Malloc(BufferSize);
+	//	int64 CompressionBufferSize = 0;
+	//	uint8* PersistantCompressionBuffer = NULL;
+	//	int32 ErrorCount = 0;
+	//	int32 FileCount = 0;
+	//	int32 ExtractedCount = 0;
 
-		FString SourceFilePath = FPaths::ConvertRelativePathToFull(FPaths::ProjectSavedDir() / FString("Visual") / PakFile.GetMountPoint().Replace(TEXT("../../../"), TEXT("")));
+	//	FString SourceFilePath = FPaths::ConvertRelativePathToFull(FPaths::ProjectSavedDir() / FString("Visual") / PakFile.GetMountPoint().Replace(TEXT("../../../"), TEXT("")));
 
-		for (FPakFile::FFileIterator It(PakFile, false); It; ++It, ++FileCount)
-		{
-			const FPakEntry& Entry = It.Info();
+	//	for (FPakFile::FFileIterator It(PakFile, false); It; ++It, ++FileCount)
+	//	{
+	//		const FPakEntry& Entry = It.Info();
 
-			PakReader.Seek(Entry.Offset);
-			uint32 SerializedCrcTest = 0;
-			FPakEntry EntryInfo;
-			EntryInfo.Serialize(PakReader, PakFile.GetInfo().Version);
-			if (EntryInfo == Entry)
-			{
-				FPakInputPair Input;
-				FMemoryWriter MemoryFile(Input.Bytes);
-				FArchive* FileHandle = &MemoryFile;
+	//		PakReader.Seek(Entry.Offset);
+	//		uint32 SerializedCrcTest = 0;
+	//		FPakEntry EntryInfo;
+	//		EntryInfo.Serialize(PakReader, PakFile.GetInfo().Version);
+	//		if (EntryInfo == Entry)
+	//		{
+	//			FPakInputPair Input;
+	//			FMemoryWriter MemoryFile(Input.Bytes);
+	//			FArchive* FileHandle = &MemoryFile;
 
-				if (Entry.CompressionMethodIndex == 0)
-				{
-					BufferedCopyFile(*FileHandle, PakReader, PakFile, Entry, Buffer, BufferSize, InKeyChain);
-				}
-				else
-				{
-					UncompressCopyFile(*FileHandle, PakReader, Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, PakFile);
-				}
-				UE_LOG(LogTemp, Display, TEXT("Extracted \"%s\" Offset %d."), *It.Filename(), Entry.Offset);
-				ExtractedCount++;
+	//			if (Entry.CompressionMethodIndex == 0)
+	//			{
+	//				BufferedCopyFile(*FileHandle, PakReader, PakFile, Entry, Buffer, BufferSize, InKeyChain);
+	//			}
+	//			else
+	//			{
+	//				UncompressCopyFile(*FileHandle, PakReader, Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, PakFile);
+	//			}
+	//			UE_LOG(LogTemp, Display, TEXT("Extracted \"%s\" Offset %d."), *It.Filename(), Entry.Offset);
+	//			ExtractedCount++;
 
-				Input.Source = SourceFilePath / It.Filename();
-				FPaths::NormalizeFilename(Input.Source);
+	//			Input.Source = SourceFilePath / It.Filename();
+	//			FPaths::NormalizeFilename(Input.Source);
 
-				Input.Dest = PakFile.GetMountPoint() / It.Filename();
-				FPaths::NormalizeFilename(Input.Dest);
-				//FPakFile::MakeDirectoryFromPath(Input.Dest);
+	//			Input.Dest = PakFile.GetMountPoint() / It.Filename();
+	//			FPaths::NormalizeFilename(Input.Dest);
+	//			//FPakFile::MakeDirectoryFromPath(Input.Dest);
 
-				Input.bNeedsCompression = Entry.CompressionMethodIndex != 0;
-				Input.bNeedEncryption = Entry.IsEncrypted();
+	//			Input.bNeedsCompression = Entry.CompressionMethodIndex != 0;
+	//			Input.bNeedEncryption = Entry.IsEncrypted();
 
-				OutEntries->Add(Input);
-			}
-		}
-		FMemory::Free(Buffer);
-		FMemory::Free(PersistantCompressionBuffer);
+	//			OutEntries->Add(Input);
+	//		}
+	//	}
+	//	FMemory::Free(Buffer);
+	//	FMemory::Free(PersistantCompressionBuffer);
 
-		UE_LOG(LogTemp, Log, TEXT("Finished extracting %d (including %d errors)."), ExtractedCount, ErrorCount);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Unable to open pak file \"%s\"."), InPakFilename);
-		return false;
-	}
+	//	UE_LOG(LogTemp, Log, TEXT("Finished extracting %d (including %d errors)."), ExtractedCount, ErrorCount);
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("Unable to open pak file \"%s\"."), InPakFilename);
+	//	return false;
+	//}
 	return true;
 }
 
 bool UAdvancePakLibrary::ExtractSingleFile(const TCHAR* InPakFilename, const TCHAR* InSingleFilename, TArray<uint8>& FileData, const FKeyChain& InKeyChain)
 {
-	FPakFile PakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
-	if (PakFile.IsValid())
-	{
-		FArchive& PakReader = *PakFile.GetSharedReader(NULL);
-		const int64 BufferSize = 8 * 1024 * 1024; // 8MB buffer for extracting
-		void* Buffer = FMemory::Malloc(BufferSize);
-		int64 CompressionBufferSize = 0;
-		uint8* PersistantCompressionBuffer = NULL;
+	//FPakFile PakFile(&FPlatformFileManager::Get().GetPlatformFile(), InPakFilename, false);
+	//if (PakFile.IsValid())
+	//{
+	//	FArchive& PakReader = *PakFile.GetSharedReader(NULL);
+	//	const int64 BufferSize = 8 * 1024 * 1024; // 8MB buffer for extracting
+	//	void* Buffer = FMemory::Malloc(BufferSize);
+	//	int64 CompressionBufferSize = 0;
+	//	uint8* PersistantCompressionBuffer = NULL;
 
-		FPakEntry Entry;
-		if (PakFile.Find(UAdvancePakLibrary::DefaultGameIniPath, &Entry) == FPakFile::EFindResult::Found)
-		{
+	//	FPakEntry Entry;
+	//	if (PakFile.Find(UAdvancePakLibrary::DefaultGameIniPath, &Entry) == FPakFile::EFindResult::Found)
+	//	{
 
-			PakReader.Seek(Entry.Offset);
-			uint32 SerializedCrcTest = 0;
-			FPakEntry EntryInfo;
-			EntryInfo.Serialize(PakReader, PakFile.GetInfo().Version);
-			if (EntryInfo == Entry)
-			{
-				FMemoryWriter MemoryFile(FileData);
-				FArchive* FileHandle = &MemoryFile;
+	//		PakReader.Seek(Entry.Offset);
+	//		uint32 SerializedCrcTest = 0;
+	//		FPakEntry EntryInfo;
+	//		EntryInfo.Serialize(PakReader, PakFile.GetInfo().Version);
+	//		if (EntryInfo == Entry)
+	//		{
+	//			FMemoryWriter MemoryFile(FileData);
+	//			FArchive* FileHandle = &MemoryFile;
 
-				if (Entry.CompressionMethodIndex == 0)
-				{
-					BufferedCopyFile(*FileHandle, PakReader, PakFile, Entry, Buffer, BufferSize, InKeyChain);
-				}
-				else
-				{
-					UncompressCopyFile(*FileHandle, PakReader, Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, PakFile);
-				}
-			}
-		}
-		else
-		{
-			FMemory::Free(Buffer);
-			FMemory::Free(PersistantCompressionBuffer);
+	//			if (Entry.CompressionMethodIndex == 0)
+	//			{
+	//				BufferedCopyFile(*FileHandle, PakReader, PakFile, Entry, Buffer, BufferSize, InKeyChain);
+	//			}
+	//			else
+	//			{
+	//				UncompressCopyFile(*FileHandle, PakReader, Entry, PersistantCompressionBuffer, CompressionBufferSize, InKeyChain, PakFile);
+	//			}
+	//		}
+	//	}
+	//	else
+	//	{
+	//		FMemory::Free(Buffer);
+	//		FMemory::Free(PersistantCompressionBuffer);
 
-			UE_LOG(LogTemp, Error, TEXT("Unable to open single file \"%s\" in pak \"%s\""), InSingleFilename, InPakFilename);
+	//		UE_LOG(LogTemp, Error, TEXT("Unable to open single file \"%s\" in pak \"%s\""), InSingleFilename, InPakFilename);
 
-			return false;
-		}
+	//		return false;
+	//	}
 
-		FMemory::Free(Buffer);
-		FMemory::Free(PersistantCompressionBuffer);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Unable to open pak file \"%s\"."), InPakFilename);
-		return false;
-	}
+	//	FMemory::Free(Buffer);
+	//	FMemory::Free(PersistantCompressionBuffer);
+	//}
+	//else
+	//{
+	//	UE_LOG(LogTemp, Error, TEXT("Unable to open pak file \"%s\"."), InPakFilename);
+	//	return false;
+	//}
 	return true;
 }
 

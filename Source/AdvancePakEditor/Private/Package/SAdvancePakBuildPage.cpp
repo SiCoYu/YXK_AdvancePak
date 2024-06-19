@@ -818,7 +818,7 @@ void SAdvancePakBuildPage::OnBuildTaskSucceed()
 		}
 
 
-		BuildConfiguresPtr->LineOptions.TrimEnd();
+		// BuildConfiguresPtr->LineOptions.TrimEnd();
 
 		if (BuildConfiguresObject->IsDuplicateDatas && !ImportConfigPath.IsEmpty() && !ImportVersion.IsEmpty() && ImportPatchs.Num() > 0)
 		{
