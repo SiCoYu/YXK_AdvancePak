@@ -32,7 +32,16 @@ void UAdvancePakWork::BeginPlay()
 	check(!PlatformURL.IsEmpty());
 
 	PakFileMgr = (FPakPlatformFile*)(FPlatformFileManager::Get().FindPlatformFile(TEXT("PakFile")));
-
+	PakFileMgr = (FPakPlatformFile*)(FPlatformFileManager::Get().FindPlatformFile(FPakPlatformFile::GetTypeName()));
+	if (PakFileMgr  == nullptr)
+	{
+		UE_LOG(LogTemp, Log ,TEXT("PlatformFile null..."));
+		IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+		PakFileMgr = new FPakPlatformFile();
+		PakFileMgr->SetLowerLevel(&PlatformFile);
+		PakFileMgr->InitializeNewAsyncIO();
+		FPlatformFileManager::Get().SetPlatformFile(*PakFileMgr);
+	}
 	AdvancePakRecorder = MakeShareable(new FAdvancePakRecorder());
 
 	ProcessList.Add(EAdvancePakProcess::LoadPlatform, MakeShareable(new FAdvancePakLoadPlatform()));
@@ -49,7 +58,7 @@ void UAdvancePakWork::BeginPlay()
 	NewKey.Name = TEXT("Default");
 	NewKey.Guid = FGuid();
 	FAES::FAESKey OutKey;
-	FPakPlatformFile::GetPakEncryptionKey(NewKey.Key, NewKey.Guid);
+	// FPakPlatformFile::GetPakEncryptionKey(NewKey.Key, NewKey.Guid);
 	KeyChain.EncryptionKeys.Add(NewKey.Guid, NewKey);
 	KeyChain.MasterEncryptionKey = KeyChain.EncryptionKeys.Find(NewKey.Guid);
 	FCoreDelegates::FPakSigningKeysDelegate& Delegate = FCoreDelegates::GetPakSigningKeysDelegate();

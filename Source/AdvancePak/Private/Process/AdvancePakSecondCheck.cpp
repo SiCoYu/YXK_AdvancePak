@@ -10,6 +10,21 @@
 
 void FAdvancePakSecondCheck::EnterProcess()
 {
+	FAdvancePakFileInfo	AdvancePakFileInfo;
+	AdvancePakFileInfo.Name = "Publish.pak";
+	AdvancePakFileInfo.Size = 62077468;
+	
+	Work->RequestLoadInfos.Add("Publish.pak", AdvancePakFileInfo);
+	if (Work->RequestLoadInfos.Num() > 0)
+	{
+		Work->SwitchEnterProcess(EAdvancePakProcess::LoadPatchs);
+	}
+	else
+	{
+		Work->SwitchEnterProcess(EAdvancePakProcess::MergeCheck);
+	}
+	return;
+
 	for (auto ConfigMask : Work->ExpectConfigMarks)
 	{
 		Work->VersionConfigs.Add(ConfigMask, UAdvancePakLibrary::AbsorbJsonToVersionConfig(*Config->ConfigMarks.Find(ConfigMask)));
