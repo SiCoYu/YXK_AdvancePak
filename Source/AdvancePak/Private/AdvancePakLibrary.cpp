@@ -4,6 +4,9 @@
 #include "AdvancePakLibrary.h"
 #include "Json.h"
 
+#if ENGINE_MAJOR_VERSION > 4 || ENGINE_MINOR_VERSION > 25
+#define FFileIterator FFilenameIterator
+#endif
 
 FString UAdvancePakLibrary::GetLongestPath(TArray<FPakInputPair>& FilesToAdd)
 {

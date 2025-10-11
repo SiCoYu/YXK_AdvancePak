@@ -25,6 +25,8 @@
 #include "Widgets/Text/STextBlock.h"
 #include "Widgets/Input/SCheckBox.h"
 #include <string>
+#include "AdvancePakEditorStyle.h"
+#include "Framework/Docking/TabManager.h"
 
 #define LOCTEXT_NAMESPACE "SAdvancePakBuildPage"
 
@@ -986,7 +988,7 @@ TSharedPtr<FAdvancePakPublishConfigure> SAdvancePakBuildPage::CreateBuildConfigu
 
 void SAdvancePakBuildPage::DealwithUatLinkwork()
 {
-	FGlobalTabmanager::Get()->InvokeTab(FName("OutputLog"));
+	FGlobalTabmanager::Get()->TryInvokeTab(FName("OutputLog"));
 }
 
 void SAdvancePakBuildPage::DealwithUatCancelButtonClicked()
@@ -1098,7 +1100,7 @@ FString SAdvancePakBuildPage::AbsorbCommamdToOptions(const FString& PakCommamd)
 	return ResultCommamd;
 }
 
-FString SAdvancePakBuildPage::AbsorbBuildConfigToString(TEnumAsByte<EProjectPackagingBuildConfigurations> BuildConfig)
+FString SAdvancePakBuildPage::AbsorbBuildConfigToString(EProjectPackagingBuildConfigurations BuildConfig)
 {
 	switch (BuildConfig)
 	{

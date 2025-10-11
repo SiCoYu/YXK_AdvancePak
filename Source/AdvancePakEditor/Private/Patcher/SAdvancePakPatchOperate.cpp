@@ -23,6 +23,7 @@
 #include "Framework/Docking/TabManager.h"
 #include "Forms/SAdvancePakAccordsForm.h"
 #include "AdvancePakType.h"
+#include "AdvancePakEditorStyle.h"
 
 #define LOCTEXT_NAMESPACE "SAdvancePakPatchOperate"
 
@@ -323,7 +324,7 @@ void SAdvancePakPatchOperate::OnPickupTaskFailed()
 
 void SAdvancePakPatchOperate::DealwithPickupLinkwork()
 {
-	FGlobalTabmanager::Get()->InvokeTab(FName("OutputLog"));
+	FGlobalTabmanager::Get()->TryInvokeTab(FName("OutputLog"));
 }
 
 void SAdvancePakPatchOperate::RenovatePatchAccordsForm()

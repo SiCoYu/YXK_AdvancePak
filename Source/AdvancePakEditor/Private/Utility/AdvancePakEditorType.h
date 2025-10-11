@@ -251,7 +251,7 @@ public:
 		FString Version;
 
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "编译配置"))
-		TEnumAsByte<EProjectPackagingBuildConfigurations> BuildConfig;
+		EProjectPackagingBuildConfigurations BuildConfig;
 
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "打包版本中要包括的地图列表", RelativeToGameContentDir, LongPackageName))
 		TArray<FFilePath> MapsToBuild;

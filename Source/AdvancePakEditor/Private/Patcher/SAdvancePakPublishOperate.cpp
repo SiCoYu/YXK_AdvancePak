@@ -25,6 +25,7 @@
 #include "Widgets/Input/SEditableTextBox.h"
 #include "Forms/SAdvancePakAccordsForm.h"
 #include "Widgets/SBoxPanel.h"
+#include "AdvancePakEditorStyle.h"
 
 class FAdvancePakCleanVisitor : public IPlatformFile::FDirectoryVisitor
 {
@@ -1149,7 +1150,7 @@ void SAdvancePakPublishOperate::OnPickupTaskFailed()
 
 void SAdvancePakPublishOperate::DealwithPickupLinkwork()
 {
-	FGlobalTabmanager::Get()->InvokeTab(FName("OutputLog"));
+	FGlobalTabmanager::Get()->TryInvokeTab(FName("OutputLog"));
 }
 
 void SAdvancePakPublishOperate::DealwithPickupCancelButtonClicked()

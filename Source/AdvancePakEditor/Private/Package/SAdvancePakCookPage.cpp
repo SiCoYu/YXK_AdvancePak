@@ -366,7 +366,7 @@ void SAdvancePakCookPage::DealwithCookProcFailed()
 
 void SAdvancePakCookPage::DealwithUatLinkwork()
 {
-	FGlobalTabmanager::Get()->InvokeTab(FName("OutputLog"));
+	FGlobalTabmanager::Get()->TryInvokeTab(FName("OutputLog"));
 }
 
 void SAdvancePakCookPage::DealwithUatCancelButtonClicked()

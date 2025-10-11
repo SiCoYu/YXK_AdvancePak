@@ -19,7 +19,7 @@ class FAdvancePakProcThread final : public FRunnable
 {
 public:
 	explicit FAdvancePakProcThread(const TCHAR* InThreadName, const FString& InProcURL, const FString& InProcParms) : ThreadName(InThreadName), ProcURL(InProcURL), ProcParams(InProcParms), IsCancel(false){
-		UE_LOG(AdvancePakLog, Log, TEXT("%s %s"), *InProcURL, *InProcParms);
+		UE_LOG(LogTemp, Log, TEXT("%s %s"), *InProcURL, *InProcParms);
 	}
 
 	void Execute();

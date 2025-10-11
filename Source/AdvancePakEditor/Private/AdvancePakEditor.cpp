@@ -64,7 +64,7 @@ void FAdvancePakEditorModule::ShutdownModule()
 
 void FAdvancePakEditorModule::PluginButtonClicked()
 {
-	FGlobalTabmanager::Get()->InvokeTab(AdvancePakEditorTabName);
+	FGlobalTabmanager::Get()->TryInvokeTab(AdvancePakEditorTabName);
 }
 
 void FAdvancePakEditorModule::AddMenuExtension(FMenuBuilder& Builder)

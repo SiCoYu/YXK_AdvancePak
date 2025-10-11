@@ -28,6 +28,7 @@
 #include "Forms/SAdvancePakPublishResourcesForm.h"
 #include "Forms/SAdvancePakPatchResourcesForm.h"
 #include "Utility/AdvancePakStateThread.h"
+#include "AdvancePakEditorStyle.h"
 
 
 void SAdvancePakPatchItem::Construct(const FArguments& InArgs, SAdvancePakPatchBar* InPatchBar)
