@@ -2,8 +2,8 @@
 
 
 #include "AdvancePakWork.h"
-#include "PakFile/Public/IPlatformFilePak.h"
-#include "Online/HTTP/Public/HttpModule.h"
+#include "IPlatformFilePak.h"
+#include "HttpModule.h"
 #include "Interfaces/IHttpResponse.h"
 #include "Kismet/GameplayStatics.h"
 #include "HAL/PlatformFilemanager.h"
@@ -32,7 +32,16 @@ void UAdvancePakWork::BeginPlay()
 	check(!PlatformURL.IsEmpty());
 
 	PakFileMgr = (FPakPlatformFile*)(FPlatformFileManager::Get().FindPlatformFile(TEXT("PakFile")));
-
+	PakFileMgr = (FPakPlatformFile*)(FPlatformFileManager::Get().FindPlatformFile(FPakPlatformFile::GetTypeName()));
+	if (PakFileMgr  == nullptr)
+	{
+		UE_LOG(LogTemp, Log ,TEXT("PlatformFile null..."));
+		IPlatformFile& PlatformFile = FPlatformFileManager::Get().GetPlatformFile();
+		PakFileMgr = new FPakPlatformFile();
+		PakFileMgr->SetLowerLevel(&PlatformFile);
+		PakFileMgr->InitializeNewAsyncIO();
+		FPlatformFileManager::Get().SetPlatformFile(*PakFileMgr);
+	}
 	AdvancePakRecorder = MakeShareable(new FAdvancePakRecorder());
 
 	ProcessList.Add(EAdvancePakProcess::LoadPlatform, MakeShareable(new FAdvancePakLoadPlatform()));
@@ -49,10 +58,9 @@ void UAdvancePakWork::BeginPlay()
 	NewKey.Name = TEXT("Default");
 	NewKey.Guid = FGuid();
 	FAES::FAESKey OutKey;
-	FPakPlatformFile::GetPakEncryptionKey(NewKey.Key, NewKey.Guid);
+	// FPakPlatformFile::GetPakEncryptionKey(NewKey.Key, NewKey.Guid);
 	KeyChain.EncryptionKeys.Add(NewKey.Guid, NewKey);
 	KeyChain.MasterEncryptionKey = KeyChain.EncryptionKeys.Find(NewKey.Guid);
-	FCoreDelegates::FPakSigningKeysDelegate& Delegate = FCoreDelegates::GetPakSigningKeysDelegate();
 	TArray<uint8> PublicExponent;
 	TArray<uint8> Modulus;
 
@@ -60,9 +68,8 @@ void UAdvancePakWork::BeginPlay()
 	{
 		AdvancePakConfig = Cast<UAdvancePakConfigSave>(UGameplayStatics::LoadGameFromSlot(UAdvancePakLibrary::AdvancePakConfigName, 0));
 
-		if (Delegate.IsBound() && AdvancePakConfig->PrivateExponent.Num() != 0)
+		if (AdvancePakConfig->PrivateExponent.Num() != 0)
 		{
-			Delegate.Execute(PublicExponent, Modulus);
 			KeyChain.SigningKey = FRSA::CreateKey(PublicExponent, AdvancePakConfig->PrivateExponent, Modulus);
 		}
 	}
@@ -79,9 +86,8 @@ void UAdvancePakWork::BeginPlay()
 		FString PrivateExponentValue;
 		GConfig->GetString(TEXT("AdvancePak"), TEXT("PrivateExponent"), PrivateExponentValue, UAdvancePakLibrary::DefaultGameIniPath);
 		FBase64::Decode(PrivateExponentValue, AdvancePakConfig->PrivateExponent);
-		if (Delegate.IsBound() && AdvancePakConfig->PrivateExponent.Num() != 0)
+		if (AdvancePakConfig->PrivateExponent.Num() != 0)
 		{
-			Delegate.Execute(PublicExponent, Modulus);
 			KeyChain.SigningKey = FRSA::CreateKey(PublicExponent, AdvancePakConfig->PrivateExponent, Modulus);
 		}
 

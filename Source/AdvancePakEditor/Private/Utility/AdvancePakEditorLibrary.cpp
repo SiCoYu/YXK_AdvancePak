@@ -7,9 +7,7 @@
 #include "Framework/Notifications/NotificationManager.h"
 #include "Misc/SecureHash.h"
 #include "Interfaces/IPluginManager.h"
-
-
-
+#include "Misc/EngineVersionComparison.h"
 
 FText UAdvancePakEditorLibrary::LocText(const FString& KeyStr)
 {
@@ -31,15 +29,27 @@ void UAdvancePakEditorLibrary::InitializeLibrary()
 	PlatformFile = &FPlatformFileManager::Get().GetPlatformFile();
 
 #if PLATFORM_WINDOWS
+#if ENGINE_MAJOR_VERSION > 4
+	UnrealPakPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Win64") / FString("UnrealPak.exe");
+	UnrealCmdPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Win64") / FString("UnrealEditor.exe");
+	UnrealRunUAT = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Build") / FString("BatchFiles") / FString("RunUAT.bat");
+#else
 	UnrealPakPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Win64") / FString("UnrealPak.exe");
 	UnrealCmdPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Win64") / FString("UE4Editor-Cmd.exe");
 	UnrealRunUAT = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Build") / FString("BatchFiles") / FString("RunUAT.bat");
 #endif
+#endif
 
 #if PLATFORM_MAC
+#if ENGINE_MAJOR_VERSION > 4
+	UnrealPakPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Mac") / FString("UnrealPak");
+	UnrealCmdPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Mac") / FString("UnrealEditor.app") / FString("Contents") / FString("MacOS") / FString("UnrealEditor");
+	UnrealRunUAT = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Build") / FString("BatchFiles") / FString("RunUAT.command");
+#else
 	UnrealPakPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Mac") / FString("UnrealPak");
 	UnrealCmdPath = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Binaries") / FString("Mac") / FString("UE4Editor.app") / FString("Contents") / FString("MacOS") / FString("UE4Editor");
 	UnrealRunUAT = FPaths::ConvertRelativePathToFull(FPaths::EngineDir()) / FString("Build") / FString("BatchFiles") / FString("RunUAT.command");
+#endif
 #endif
 
 	GameContentPath = FString::Printf(TEXT("../../../%s/Content/"), FApp::GetProjectName());
@@ -545,7 +555,19 @@ void UAdvancePakEditorLibrary::GetResourceDatasByPackageName(const FName& Packag
 void UAdvancePakEditorLibrary::GetResourceRelyons(const FName& PackageName, const EAdvancePakRelyonType& RelyonType, TArray<FName>& OutPackageNames)
 {
 	TArray<FName> TotalRelyons;
-	AssetRegistryModule->Get().GetDependencies(PackageName, TotalRelyons, AbsorbRelyonType(RelyonType));
+	EAssetRegistryDependencyType::Type TotalType = EAssetRegistryDependencyType::None;
+
+	SCOPED_NAMED_EVENT_TEXT("GetDependencies", FColor::Red);
+	PRAGMA_DISABLE_DEPRECATION_WARNINGS
+	AssetRegistryModule->Get().GetDependencies(PackageName, TotalRelyons,
+#if UE_VERSION_OLDER_THAN(5,3,0)
+			TotalType
+#else
+			UE::AssetRegistry::EDependencyCategory::Package
+#endif
+		);
+	PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
 	for (auto Relyon : TotalRelyons)
 	{
 		if (Relyon.ToString().StartsWith(ScriptStartPath) || GetResourceDataByPackageName(Relyon).IsRedirector())

@@ -100,10 +100,10 @@ public:
 	TSharedPtr<FAdvancePakVersionConfig> LatSavConfig;
 
 	UPROPERTY()
-		UAdvancePakConfigSave* AdvancePakConfig;
+		TObjectPtr<UAdvancePakConfigSave> AdvancePakConfig;
 
 	UPROPERTY()
-		UAdvancePakStateSave* AdvancePakState;
+		TObjectPtr<UAdvancePakStateSave> AdvancePakState;
 
 protected:
 

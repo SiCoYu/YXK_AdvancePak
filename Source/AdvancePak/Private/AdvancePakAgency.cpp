@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "AdvancePakAgency.h"
-#include "Online/HTTP/Public/HttpModule.h"
+#include "HttpModule.h"
 #include "openssl/md5.h"
 #include "Misc/FileHelper.h"
 #include "HAL/PlatformFilemanager.h"
@@ -118,7 +118,7 @@ FAdvancePakAgency::FAdvancePakAgency()
 	LastReceived = 0;
 
 	HttpRequest = FHttpModule::Get().CreateRequest();
-	HttpRequest->OnRequestProgress().BindRaw(this, &FAdvancePakAgency::OnProcessRequestProgress);
+	HttpRequest->OnRequestProgress64().BindRaw(this, &FAdvancePakAgency::OnProcessRequestProgress);
 	HttpRequest->OnProcessRequestComplete().BindRaw(this, &FAdvancePakAgency::OnProcessRequestComplete);
 }
 
@@ -273,7 +273,7 @@ void FAdvancePakAgency::OnProcessHeaderReceived(FHttpRequestPtr Request, const F
 	}
 }
 
-void FAdvancePakAgency::OnProcessRequestProgress(FHttpRequestPtr Request, int32 BytesSent, int32 BytesReceived)
+void FAdvancePakAgency::OnProcessRequestProgress(FHttpRequestPtr Request, uint64 BytesSent, uint64 BytesReceived)
 {
 	TArray<uint8>& ResponseContent = GetAgencyResponsePayload(HttpRequest);
 

@@ -10,8 +10,8 @@
 #include "SAdvancePakPublishOperate.h"
 #include "SAdvancePakPatchOperate.h"
 #include "Utility/AdvancePakCreator.h"
-#include "DesktopPlatform/Public/IDesktopPlatform.h"
-#include "DesktopPlatform/Public/DesktopPlatformModule.h"
+#include "IDesktopPlatform.h"
+#include "DesktopPlatformModule.h"
 #include "Framework/Application/SlateApplication.h"
 #include "Forms/SAdvancePakGathersForm.h"
 #include "Forms/SAdvancePakInvolveRegularsForm.h"
@@ -28,6 +28,7 @@
 #include "Forms/SAdvancePakPublishResourcesForm.h"
 #include "Forms/SAdvancePakPatchResourcesForm.h"
 #include "Utility/AdvancePakStateThread.h"
+#include "AdvancePakEditorStyle.h"
 
 
 void SAdvancePakPatchItem::Construct(const FArguments& InArgs, SAdvancePakPatchBar* InPatchBar)

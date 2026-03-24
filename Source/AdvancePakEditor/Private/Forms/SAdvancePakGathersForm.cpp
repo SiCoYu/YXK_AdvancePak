@@ -13,8 +13,8 @@
 #include "Editor.h"
 #include "Raws/SAdvancePakGathersRaw.h"
 #include "Widgets/Input/SHyperlink.h"
-#include "DesktopPlatform/Public/IDesktopPlatform.h"
-#include "DesktopPlatform/Public/DesktopPlatformModule.h"
+#include "IDesktopPlatform.h"
+#include "DesktopPlatformModule.h"
 
 
 

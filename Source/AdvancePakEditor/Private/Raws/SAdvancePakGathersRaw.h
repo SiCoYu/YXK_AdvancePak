@@ -6,6 +6,7 @@
 #include "Widgets/SCompoundWidget.h"
 #include "Widgets/Views/SListView.h"
 #include "Widgets/Views/STableRow.h"
+#include "Utility/AdvancePakEditorType.h"
 
 class FAdvancePakCreator;
 class SAdvancePakGathersForm;

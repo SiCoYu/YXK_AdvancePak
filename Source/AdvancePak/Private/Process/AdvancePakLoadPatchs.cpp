@@ -2,11 +2,11 @@
 #include "AdvancePakWork.h"
 #include "AdvancePakLibrary.h"
 #include "Kismet/GameplayStatics.h"
-#include "Online/HTTP/Public/HttpModule.h"
+#include "HttpModule.h"
 #include "AdvancePakType.h"
 #include "AdvancePakAgency.h" 
 #include "Misc/Paths.h"
-#include "PakFile/Public/IPlatformFilePak.h"
+#include "IPlatformFilePak.h"
 
 void FAdvancePakLoadPatchs::EnterProcess()
 {
@@ -26,17 +26,17 @@ void FAdvancePakLoadPatchs::EnterProcess()
 		if (Work->RequestLoadInfos.Contains(State->LoadingInfo.GetFormatName())
 			&& Work->RequestLoadInfos.Find(State->LoadingInfo.GetFormatName())->IsEqual(State->LoadingInfo)
 			&& BufferFiles.Contains(State->LoadingInfo.GetFormatName())
-			&& BufferFiles.begin().Value().Former.Equals(State->LoadingInfo.Former)
-			&& BufferFiles.begin().Value().Future.Equals(State->LoadingInfo.Future))
+			&& BufferFiles.begin()->Value.Former.Equals(State->LoadingInfo.Former)
+			&& BufferFiles.begin()->Value.Future.Equals(State->LoadingInfo.Future))
 		{
-			if (BufferFiles.begin().Value().Size == State->LoadingInfo.Size)
+			if (BufferFiles.begin()->Value.Size == State->LoadingInfo.Size)
 			{
 				PlatformFile->MoveFile(*(UAdvancePakLibrary::BufferPaksPath / State->LoadingInfo.GetFormatName()), *(UAdvancePakLibrary::StorePaksPath / State->LoadingInfo.GetFormatName()));
 				Work->RequestLoadInfos.Remove(State->LoadingInfo.GetFormatName());
 			}
-			else if (BufferFiles.begin().Value().Size < State->LoadingInfo.Size)
+			else if (BufferFiles.begin()->Value.Size < State->LoadingInfo.Size)
 			{
-				TotalSize += State->LoadingInfo.Size - BufferFiles.begin().Value().Size;
+				TotalSize += State->LoadingInfo.Size - BufferFiles.begin()->Value.Size;
 				RequestList.Add(State->LoadingInfo.GetFormatName());
 			}
 			else

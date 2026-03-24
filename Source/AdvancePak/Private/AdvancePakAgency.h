@@ -82,7 +82,7 @@ protected:
 
 	void OnProcessRequestComplete(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bConnectedSuccessfully);
 
-	void OnProcessRequestProgress(FHttpRequestPtr Request, int32 BytesSent, int32 BytesReceived);
+	void OnProcessRequestProgress(FHttpRequestPtr Request, uint64 BytesSent, uint64 BytesReceived);
 
 	void OnProcessHeaderReceived(FHttpRequestPtr Request, const FString& HeaderName, const FString& NewHeaderValue);
 

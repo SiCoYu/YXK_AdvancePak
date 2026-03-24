@@ -20,7 +20,6 @@
 #include "Widgets/Input/SButton.h"
 #include "Widgets/Input/SEditableTextBox.h"
 
-
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION
 void SAdvancePakMapsForm::Construct(const FArguments& InArgs, const TSharedRef<FAdvancePakCreator>& InModel)
 {
@@ -59,7 +58,7 @@ void SAdvancePakMapsForm::Construct(const FArguments& InArgs, const TSharedRef<F
 			SNew(SCheckBox)
 			.IsChecked(this, &SAdvancePakMapsForm::DealwithShowCheckBoxIsChecked, EShowMapsChoices::ShowAllMaps)
 		.OnCheckStateChanged(this, &SAdvancePakMapsForm::DealwithShowCheckBoxCheckStateChanged, EShowMapsChoices::ShowAllMaps)
-		.Style(FEditorStyle::Get(), "RadioButton")
+		.Style(FAppStyle::Get(), "RadioButton")
 		[
 			SNew(STextBlock)
 			.Text(OPTEXT("ShowAll"))
@@ -73,7 +72,7 @@ void SAdvancePakMapsForm::Construct(const FArguments& InArgs, const TSharedRef<F
 			SNew(SCheckBox)
 			.IsChecked(this, &SAdvancePakMapsForm::DealwithShowCheckBoxIsChecked, EShowMapsChoices::ShowCookedMaps)
 		.OnCheckStateChanged(this, &SAdvancePakMapsForm::DealwithShowCheckBoxCheckStateChanged, EShowMapsChoices::ShowCookedMaps)
-		.Style(FEditorStyle::Get(), "RadioButton")
+		.Style(FAppStyle::Get(), "RadioButton")
 		[
 			SNew(STextBlock)
 			.Text(OPTEXT("ShowCooked"))

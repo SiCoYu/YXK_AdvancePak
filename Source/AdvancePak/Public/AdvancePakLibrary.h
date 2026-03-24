@@ -7,7 +7,7 @@
 #include "AdvancePakType.h"
 #include "Misc/Paths.h"
 #include "Misc/App.h"
-#include "AssetRegistryModule.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "Misc/SecureHash.h"
 #include "AdvancePakLibrary.generated.h"
 
@@ -22,6 +22,12 @@ public:
 	static void InitializeLibrary();
 
 	static bool CreatePakFile(const TCHAR* Filename, TArray<FPakInputPair>& FilesToAdd, const FPakCommandLineParameters& CmdLineParameters, const FKeyChain& InKeyChain);
+
+	UFUNCTION(BlueprintCallable, Category = "AdvancePak", meta = (DisplayName = "Merge Pak File"))
+	static bool MergePakFile(const FString& InBasePak, const FString& InMergePak);
+
+	UFUNCTION(BlueprintCallable, Category = "AdvancePak", meta = (DisplayName = "Merge Cook File"))
+	static bool MergeCookFile(const FString& InBasePak, const TArray<FString>& InCookAssets);
 
 	static bool ExtractPakFile(const TCHAR* InPakFilename, TArray<FPakInputPair>* OutEntries, const FKeyChain& InKeyChain);
 

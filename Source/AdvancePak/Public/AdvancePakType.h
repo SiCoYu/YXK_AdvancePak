@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine.h"
+#include "Misc/IEngineCrypto.h"
 #include "UObject/NoExportTypes.h"
 #include "GameFramework/SaveGame.h"
 #include "IPlatformFilePak.h"
@@ -506,11 +506,11 @@ struct FPakCommandLineParameters
 	bool bAlignFilesLargerThanBlock;	// Align files that are larger than block size
 };
 
-struct FPakEntryPair
-{
-	FString Filename;
-	FPakEntry Info;
-};
+//struct FPakEntryPair
+//{
+//	FString Filename;
+//	FPakEntry Info;
+//};
 
 struct FPakInputPair
 {

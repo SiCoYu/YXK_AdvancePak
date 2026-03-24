@@ -11,7 +11,7 @@
 #include "Templates/SharedPointer.h"
 #include "ILauncher.h"
 #include "ILauncherProfileManager.h"
-#include "AssetRegistryModule.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "Misc/Paths.h"
 #include "AdvancePakEditorType.h"
 #include "Utility/AdvancePakEditorLibrary.h"

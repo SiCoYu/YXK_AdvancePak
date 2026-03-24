@@ -2,10 +2,11 @@
 
 
 #include "SAdvancePakPublishConfigure.h"
+#include "AdvancePakEditorStyle.h"
 #include "SlateOptMacros.h"
 #include "Utility/AdvancePakCreator.h"
-#include "DesktopPlatform/Public/IDesktopPlatform.h"
-#include "DesktopPlatform/Public/DesktopPlatformModule.h"
+#include "IDesktopPlatform.h"
+#include "DesktopPlatformModule.h"
 #include "Framework/Application/SlateApplication.h"
 
 #include "Widgets/Images/SImage.h"

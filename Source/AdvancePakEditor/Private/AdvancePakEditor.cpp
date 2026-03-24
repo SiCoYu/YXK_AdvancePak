@@ -9,7 +9,7 @@
 #include "ContentBrowserDelegates.h"
 #include "LevelEditor.h"
 #include "AdvancePakLibrary.h"
-#include "AssetRegistryModule.h"
+#include "AssetRegistry/AssetRegistryModule.h"
 #include "ILauncherServicesModule.h"
 #include "ITargetDeviceServicesModule.h"
 #include "Utility/AdvancePakCreator.h"
@@ -64,7 +64,7 @@ void FAdvancePakEditorModule::ShutdownModule()
 
 void FAdvancePakEditorModule::PluginButtonClicked()
 {
-	TSharedRef<SDockTab> DockTab = FGlobalTabmanager::Get()->InvokeTab(AdvancePakEditorTabName);
+	FGlobalTabmanager::Get()->TryInvokeTab(AdvancePakEditorTabName);
 }
 
 void FAdvancePakEditorModule::AddMenuExtension(FMenuBuilder& Builder)

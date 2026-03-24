@@ -9,7 +9,7 @@
 #include "Utility/AdvancePakEditorType.h"
 
 class FAdvancePakCreator;
-class SAdvancePakInvolveRegularsForm;
+class SAdvancePakAbsolveRegularsForm;
 /**
  * 
  */

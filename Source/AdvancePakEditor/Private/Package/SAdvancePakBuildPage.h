@@ -7,6 +7,7 @@
 #include "Utility/AdvancePakEditorType.h"
 #include "Widgets/Views/STableRow.h"
 #include "Widgets/Views/SListView.h"
+#include "Utility/AdvancePakCreator.h"
 
 class SEditableTextBox;
 class SMultiLineEditableTextBox;
@@ -81,7 +82,7 @@ protected:
 
 	FString AbsorbCommamdToOptions(const FString& PakCommamd);
 
-	FString AbsorbBuildConfigToString(TEnumAsByte<EProjectPackagingBuildConfigurations> BuildConfig);
+	FString AbsorbBuildConfigToString(EProjectPackagingBuildConfigurations BuildConfig);
 
 protected:
 

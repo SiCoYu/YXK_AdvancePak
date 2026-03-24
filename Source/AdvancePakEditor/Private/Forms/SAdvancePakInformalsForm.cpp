@@ -9,12 +9,13 @@
 #include "Utility/AdvancePakCreator.h"
 #include "Widgets/Layout/SBorder.h"
 #include "Widgets/Layout/SSeparator.h"
-#include "DesktopPlatform/Public/DesktopPlatformModule.h"
+
 #include "Editor/PropertyEditor/Public/PropertyCustomizationHelpers.h"
 #include "Editor.h"
 #include "Raws/SAdvancePakInformalsRaw.h"
 #include "Widgets/Input/SComboBox.h"
-#include "DesktopPlatform/Public/IDesktopPlatform.h"
+#include "IDesktopPlatform.h"
+#include "DesktopPlatformModule.h"
 
 
 BEGIN_SLATE_FUNCTION_BUILD_OPTIMIZATION

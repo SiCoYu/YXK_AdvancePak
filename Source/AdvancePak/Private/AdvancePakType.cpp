@@ -43,9 +43,12 @@ bool FSignedArchiveWriter::Close()
 		SerializeBufferAndSign();
 	}
 
+	TArray<uint8> SignatureData;
+	//SignatureData.Append(OutputPakFile->Info.IndexHash.Hash, UE_ARRAY_COUNT(FSHAHash::Hash));
+
 	FArchive* SignatureWriter = IFileManager::Get().CreateFileWriter(*PakSignaturesFilename);
 	FPakSignatureFile SignatureFile;
-	SignatureFile.SetChunkHashesAndSign(ChunkHashes, SigningKey);
+	SignatureFile.SetChunkHashesAndSign(ChunkHashes, SignatureData, SigningKey);
 	SignatureFile.Serialize(*SignatureWriter);
 	delete SignatureWriter;
 

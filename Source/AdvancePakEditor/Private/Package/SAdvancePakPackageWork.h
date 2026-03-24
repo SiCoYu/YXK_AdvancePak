@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/SCompoundWidget.h"
+#include "Utility/AdvancePakEditorType.h"
 
 class FAdvancePakCreator;
 class SAdvancePakPatchBar;

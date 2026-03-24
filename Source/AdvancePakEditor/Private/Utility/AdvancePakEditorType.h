@@ -6,7 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "Engine/EngineTypes.h"
 #include "AdvancePakType.h"
-#include "Editor/UnrealEd/Classes/Settings/ProjectPackagingSettings.h"
+#include "Settings/ProjectPackagingSettings.h"
 #include "AdvancePakEditorType.generated.h"
 
 class FAdvancePakInformalInfo;
@@ -251,7 +251,7 @@ public:
 		FString Version;
 
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "编译配置"))
-		TEnumAsByte<EProjectPackagingBuildConfigurations> BuildConfig;
+		EProjectPackagingBuildConfigurations BuildConfig;
 
 	UPROPERTY(EditAnywhere, meta = (DisplayName = "打包版本中要包括的地图列表", RelativeToGameContentDir, LongPackageName))
 		TArray<FFilePath> MapsToBuild;
@@ -290,7 +290,7 @@ public:
 	template<typename TEnum>
 	static FString GetEnumNameByValue(const FString& Name, const TEnum& Value)
 	{
-		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, *Name, true);
+		const UEnum* EnumPtr = FindObject<UEnum>(nullptr, *Name, true);
 		if (!EnumPtr)
 			return FString("InValid");
 		return EnumPtr->GetNameStringByIndex((int32)Value);
@@ -299,7 +299,7 @@ public:
 	template<typename TEnum>
 	static TEnum GetEnumValueByName(const FString& Name, const FString& Value)
 	{
-		const UEnum* EnumPtr = FindObject<UEnum>(ANY_PACKAGE, *Name, true);
+		const UEnum* EnumPtr = FindObject<UEnum>(nullptr, *Name, true);
 		if (!EnumPtr) {
 			return TEnum(0);
 		}
